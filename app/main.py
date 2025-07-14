@@ -3,7 +3,6 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 import uvicorn
-import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import os
@@ -11,9 +10,6 @@ import pickle
 from sentence_transformers import SentenceTransformer
 from sklearn.preprocessing import normalize
 import ast
-from sklearn.feature_extraction.text import TfidfVectorizer
-import yake
-import re
 
 app = FastAPI(
     title="Health Podcast Recommendation System",
@@ -45,12 +41,9 @@ class PodcastRecommendationSystem:
         self.cosine_sim = None
         self.embedding_model = None
         
-    
     def load_data(self, data_path: str):
         """Load podcast data from CSV file"""
         try:
-            # self.podcast_data = pd.read_csv(data_path)
-            
             with open(data_path, "rb") as f:
                 self.podcast_data = pickle.load(f)
             
@@ -195,7 +188,6 @@ class PodcastRecommendationSystem:
             similarities = np.dot(matrix_norm, vec_norm)
             return similarities
     
-
     def item_based_filtering(self, podcast_title: str, n_recommendations: int = 5):
         """Get recommendations based on podcast title"""
         if self.podcast_data is None or self.cosine_sim is None:
@@ -273,34 +265,6 @@ class PodcastRecommendationSystem:
         
         return top
     
-    def vectorizers_filtering(self, user_input, vectorizer, max_min=None, top_n=100, column='transcript_embedding_weighted_mean_TfidfVectorizer'):
-        df = self.podcast_data.copy()
-
-        if max_min is not None:
-            df = df[df['duration_min'] <= max_min]
-
-        # Vectorize user input and normalize
-        user_emb_sparse = vectorizer.transform([user_input])
-        user_emb = normalize(user_emb_sparse).toarray()[0]
-
-        # Filter out rows with None embeddings
-        df = df[df[column].apply(lambda x: x is not None)]
-
-        embeddings_matrix = np.vstack(df[column].values)
-        embeddings_matrix_norm = embeddings_matrix / np.linalg.norm(embeddings_matrix, axis=1, keepdims=True)
-
-        similarities = np.dot(embeddings_matrix_norm, user_emb)
-
-        df = df.assign(similarity=similarities)
-        top = df.sort_values(by="similarity", ascending=False).head(top_n)
-
-        for idx, row in top.iloc[:5].iterrows():
-            print(f"\n🎯 Title: {row['title']}")
-            print(f"🎙️ Host: {row['host']}")
-            print(f"🧠 Similarity: {row['similarity']:.4f}")
-
-        return top
-
     
 # Initialize recommendation system
 recommendation_system = PodcastRecommendationSystem()
@@ -347,17 +311,11 @@ async def get_recommendations(podcast_title: str = Form(...), num_recommendation
         # Convert to list of dictionaries for JSON response
         recommendations_list = []
         for _, row in recommendations.iterrows():
-            # Get transcript preview (first 200 characters)
-            transcript_preview = row.get('transcript', '')
-            if isinstance(transcript_preview, str) and len(transcript_preview) > 200:
-                transcript_preview = transcript_preview[:200] + "..."
             
             recommendations_list.append({
                 'title': row.get('title', 'Unknown'),
                 'host': row.get('host', 'Unknown Host'),
-                'transcript_preview': transcript_preview,
                 'duration_min': row.get('duration_min', 0),
-                'tags': row.get('tags', ''),
                 'similarity_score': float(row.get("similarity", 0.0))
             })
         
@@ -377,17 +335,11 @@ async def get_random_playlist(num_recommendations: int = Form(5)):
         # Convert to list of dictionaries for JSON response
         recommendations_list = []
         for _, row in recommendations.iterrows():
-            # Get transcript preview (first 200 characters)
-            transcript_preview = row.get('transcript', '')
-            if isinstance(transcript_preview, str) and len(transcript_preview) > 200:
-                transcript_preview = transcript_preview[:200] + "..."
-            
+           
             recommendations_list.append({
                 'title': row.get('title', 'Unknown'),
                 'host': row.get('host', 'Unknown Host'),
-                'transcript_preview': transcript_preview,
                 'duration_min': row.get('duration_min', 0),
-                'tags': row.get('tags', ''),
                 'similarity_score': float(row.get("similarity", 0.0))
             })
         
@@ -409,17 +361,11 @@ async def get_content_recommendations(user_input: str = Form(...), num_recommend
         # Convert to list of dictionaries for JSON response
         recommendations_list = []
         for _, row in recommendations.iterrows():
-            # Get transcript preview (first 200 characters)
-            transcript_preview = row.get('transcript', '')
-            if isinstance(transcript_preview, str) and len(transcript_preview) > 200:
-                transcript_preview = transcript_preview[:200] + "..."
             
             recommendations_list.append({
                 'title': row.get('title', 'Unknown'),
                 'host': row.get('host', 'Unknown Host'),
-                'transcript_preview': transcript_preview,
                 'duration_min': row.get('duration_min', 0),
-                'tags': row.get('tags', ''),
                 'similarity_score': float(row.get("similarity", 0.0))
             })
         
