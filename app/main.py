@@ -18,10 +18,10 @@ app = FastAPI(
 )
 
 # Mount static files
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 # Templates
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory="app/templates")
 
 # Global variables for recommendation system
 podcast_data = None
@@ -50,7 +50,7 @@ class PodcastRecommendationSystem:
             print(f"Loaded {len(self.podcast_data)} podcasts")
             
             # Load embedding model if available
-            model_path = "../podcast_youtube_recommender/models/embedding_model"
+            model_path = "podcast_youtube_recommender/models/embedding_model"
             if os.path.exists(model_path):
                 try:
                     self.embedding_model = SentenceTransformer(model_path)
@@ -273,7 +273,7 @@ recommendation_system = PodcastRecommendationSystem()
 async def startup_event():
     """Initialize the recommendation system on startup"""
     # Try to load data from the podcast_youtube_recommender directory
-    data_path = "../podcast_youtube_recommender/transformers_embedded_podcast_data.pkl"
+    data_path = "podcast_youtube_recommender/transformers_embedded_podcast_data.pkl"
     if os.path.exists(data_path):
         if recommendation_system.load_data(data_path):
             recommendation_system.prepare_recommendations()

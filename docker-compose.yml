@@ -1,0 +1,15 @@
+services:
+  ml_service:
+    build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - .:/app
+      - ./dump:/app/dump  # Ensure the data directory is mounted
+    ports:
+      - "8000:8000"
+    networks:
+      - ai_network
+
+networks:
+  ai_network:
+    driver: bridge

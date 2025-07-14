@@ -4,13 +4,13 @@ A modern FastAPI web application that provides content-based recommendations for
 
 ## Features
 
-- 🧠 **AI-Powered Recommendations**: Uses pre-computed embeddings (transcript and metadata) for superior content analysis
-- 🎯 **Health-Focused**: Specifically designed for health and wellness podcast content
-- 🚀 **Modern UI**: Beautiful, responsive design with Bootstrap 5 and custom CSS
-- ⚡ **Fast Performance**: Built with FastAPI for high-performance async operations
-- 📱 **Mobile Responsive**: Works perfectly on all devices
-- 🔍 **Interactive Search**: Real-time podcast recommendations with loading states
-- 📊 **Embedding-Based**: Leverages advanced NLP embeddings for better recommendations
+- **AI-Powered Recommendations**: Uses pre-computed embeddings (transcript and metadata) for superior content analysis
+- **Health-Focused**: Specifically designed for health and wellness podcast content
+- **Modern UI**: Beautiful, responsive design with Bootstrap 5 and custom CSS
+- **Fast Performance**: Built with FastAPI for high-performance async operations
+- **Mobile Responsive**: Works perfectly on all devices
+- **Interactive Search**: Real-time podcast recommendations with loading states
+- **Embedding-Based**: Leverages advanced NLP embeddings for better recommendations
 
 ## Tech Stack
 
@@ -79,7 +79,7 @@ A modern FastAPI web application that provides content-based recommendations for
 
 ### Three Recommendation Modes
 
-1. **Find Similar Episodes (Episode-based)**
+1. **Find Similar Episodes (Item-based)**
    - Enter a podcast episode title you like
    - The system finds and recommends episodes most similar to your chosen episode, using a combination of transcript and metadata embeddings
 
@@ -111,7 +111,9 @@ The system uses two types of pre-computed embeddings:
 
 - `GET /` - Landing page
 - `GET /recommendations` - Recommendations form page
-- `POST /get_recommendations` - API endpoint for getting recommendations
+- `POST /get_recommendations` - API endpoint to get podcast recommendations based on title
+- `POST /get_random_playlist` - API endpoint to get a random playlist of podcast recommendations
+- `POST /get_content_recommendations` - API endpoint to get recommendations based on user's health goals or concerns
 - `GET /health` - Health check endpoint
 
 ## Data Requirements
