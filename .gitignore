@@ -1,0 +1,17 @@
+transcripts/
+
+transcripts
+
+venv
+venv/
+
+# all pycaches
+__pycache__/
+
+all_combined_final.csv
+
+
+
+embedded_podcast_data.pkl
+
+TfidfVectorizer_embedded_podcast_data.pkl

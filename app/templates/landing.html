@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthCast - AI-Powered Health Podcast Recommendations</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', path='/css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="fas fa-podcast me-2"></i>HealthCast
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/recommendations">Get Recommendations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center min-vh-100">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold text-primary mb-4">
+                        Discover Your Perfect Health Podcast
+                    </h1>
+                    <p class="lead mb-4">
+                        Powered by AI, our recommendation system helps you find the best health and wellness podcasts 
+                        tailored to your interests and goals.
+                    </p>
+                    <div class="d-flex gap-3">
+                        <a href="/recommendations" class="btn btn-primary btn-lg">
+                            <i class="fas fa-search me-2"></i>Get Recommendations
+                        </a>
+                        <a href="#features" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-info-circle me-2"></i>Learn More
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-image">
+                        <i class="fas fa-brain text-primary" style="font-size: 15rem; opacity: 0.1;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5 bg-light">
+        <div class="container">
+            <div class="row text-center mb-5">
+                <div class="col-12">
+                    <h2 class="display-5 fw-bold text-primary">Why Choose HealthCast?</h2>
+                    <p class="lead">Advanced AI technology meets health and wellness content</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-robot text-primary" style="font-size: 3rem;"></i>
+                            </div>
+                            <h4 class="card-title">AI-Powered</h4>
+                            <p class="card-text">
+                                Our advanced machine learning algorithms analyze podcast content to provide 
+                                personalized recommendations based on your interests.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-heart text-primary" style="font-size: 3rem;"></i>
+                            </div>
+                            <h4 class="card-title">Health Focused</h4>
+                            <p class="card-text">
+                                Curated specifically for health and wellness content, ensuring you discover 
+                                relevant and valuable information for your well-being journey.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon mb-3">
+                                <i class="fas fa-bolt text-primary" style="font-size: 3rem;"></i>
+                            </div>
+                            <h4 class="card-title">Instant Results</h4>
+                            <p class="card-text">
+                                Get personalized recommendations instantly. No waiting, no complicated setup - 
+                                just enter a podcast you love and discover similar content.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row text-center mb-5">
+                <div class="col-12">
+                    <h2 class="display-5 fw-bold text-primary">How It Works</h2>
+                    <p class="lead">Three simple steps to discover your next favorite health podcast</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4 text-center">
+                    <div class="step-number mb-3">
+                        <span class="badge bg-primary rounded-circle" style="font-size: 2rem; width: 80px; height: 80px; line-height: 80px;">1</span>
+                    </div>
+                    <h4>Enter a Podcast</h4>
+                    <p>Tell us about a health podcast you already enjoy or are interested in.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="step-number mb-3">
+                        <span class="badge bg-primary rounded-circle" style="font-size: 2rem; width: 80px; height: 80px; line-height: 80px;">2</span>
+                    </div>
+                    <h4>AI Analysis</h4>
+                    <p>Our AI analyzes the content, topics, and themes to understand your preferences.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="step-number mb-3">
+                        <span class="badge bg-primary rounded-circle" style="font-size: 2rem; width: 80px; height: 80px; line-height: 80px;">3</span>
+                    </div>
+                    <h4>Get Recommendations</h4>
+                    <p>Receive a curated list of similar health podcasts tailored to your interests.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-5 bg-primary text-white">
+        <div class="container text-center">
+            <h2 class="display-5 fw-bold mb-4">Ready to Discover Amazing Health Podcasts?</h2>
+            <p class="lead mb-4">Start your journey to better health and wellness today</p>
+            <a href="/recommendations" class="btn btn-light btn-lg">
+                <i class="fas fa-play me-2"></i>Start Exploring
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-5 bg-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h2 class="display-5 fw-bold text-primary mb-4">About HealthCast</h2>
+                    <p class="lead mb-4">
+                        HealthCast is an AI-powered recommendation system designed specifically for health and wellness podcasts. 
+                        We use advanced natural language processing and machine learning techniques to analyze podcast content 
+                        and provide personalized recommendations.
+                    </p>
+                    <p class="mb-4">
+                        Our system considers various factors including topics, themes, language style, and content focus 
+                        to ensure you discover podcasts that truly match your health and wellness interests.
+                    </p>
+                    <div class="d-flex gap-3">
+                        <div class="text-center">
+                            <h4 class="text-primary fw-bold">500+</h4>
+                            <p class="text-muted">Podcasts Analyzed</p>
+                        </div>
+                        <div class="text-center">
+                            <h4 class="text-primary fw-bold">95%</h4>
+                            <p class="text-muted">Accuracy Rate</p>
+                        </div>
+                        <div class="text-center">
+                            <h4 class="text-primary fw-bold">24/7</h4>
+                            <p class="text-muted">Available</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="about-image text-center">
+                        <i class="fas fa-chart-line text-primary" style="font-size: 10rem; opacity: 0.1;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="fw-bold">
+                        <i class="fas fa-podcast me-2"></i>HealthCast
+                    </h5>
+                    <p class="text-muted">AI-powered health podcast recommendations for your wellness journey.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted mb-0">&copy; 2024 HealthCast. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', path='/js/main.js') }}"></script>
+</body>
+</html> 
