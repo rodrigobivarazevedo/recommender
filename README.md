@@ -24,25 +24,25 @@ A modern FastAPI web application that provides content-based recommendations for
 
 ## Installation
 
-1. **Navigate to the app directory**:
-   ```bash
-   cd app
-   ```
-
-2. **Create a virtual environment**:
+1. **Create a virtual environment**:
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
-3. **Install dependencies**:
+2. **Install dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
 
 ## Usage
 
-1. **Start the application**:
+1. **Navigate to the app directory**:
+   ```bash
+   cd app
+   ```
+
+2. **Start the application**:
    ```bash
    python run.py
    ```
@@ -51,18 +51,45 @@ A modern FastAPI web application that provides content-based recommendations for
    uvicorn main:app --reload --host 0.0.0.0 --port 8000
    ```
 
-2. **Open your browser** and navigate to:
+3. **Open your browser** and navigate to:
    ```
    http://localhost:8000
    ```
 
-3. **Get recommendations**:
+4. **Get recommendations**:
    - Go to the "Get Recommendations" page
-   - Enter a podcast title or topic you're interested in
-   - Choose the number of recommendations (3, 5, or 10)
-   - Click "Get Recommendations" to see AI-generated suggestions
+   - Choose one of the three recommendation modes:
+     
+     **1. Find Similar Episodes**
+     - Enter the title of a podcast episode you enjoy
+     - Select the number of recommendations (3, 5, or 10)
+     - Click "Find Similar Episodes" to see AI-generated suggestions based on content and metadata similarity
+
+     **2. Random Playlist**
+     - Select the number of episodes for your playlist (3, 5, or 10)
+     - Click "Generate Random Playlist" to discover a handpicked set of similar episodes starting from a random show
+
+     **3. Health Goals & Concerns**
+     - Describe your health goal, concern, or a topic you're interested in (e.g., "improve sleep quality", "nutrition for weight loss")
+     - Optionally, set a maximum episode duration
+     - Select the number of recommendations (3, 5, or 10)
+     - Click "Find Health-Focused Episodes" to get personalized suggestions based on your input
 
 ## How It Works
+
+### Three Recommendation Modes
+
+1. **Find Similar Episodes (Episode-based)**
+   - Enter a podcast episode title you like
+   - The system finds and recommends episodes most similar to your chosen episode, using a combination of transcript and metadata embeddings
+
+2. **Random Playlist**
+   - The system randomly selects a starting episode and builds a playlist of similar episodes
+   - Great for discovering new content when you don’t have a specific topic or episode in mind
+
+3. **Health Goals & Concerns (Content-based)**
+   - Describe your health goal, concern, or a topic you’re interested in
+   - The system analyzes your input and recommends episodes whose content best matches your interests, using advanced semantic search on episode transcripts
 
 ### Embedding-Based Recommendation System
 The system uses two types of pre-computed embeddings:
@@ -76,10 +103,9 @@ The system uses two types of pre-computed embeddings:
    - Weight: 30% in final similarity calculation
 
 ### Recommendation Process
-1. **Data Loading**: Loads pre-computed embeddings from CSV
-2. **Embedding Processing**: Converts string embeddings to numpy arrays
-3. **Similarity Calculation**: Uses cosine similarity on combined embeddings
-4. **Ranking**: Returns top-N most similar podcasts
+- **Find Similar Episodes**: Finds the closest match to your input title, then recommends the most similar episodes using combined embeddings and cosine similarity
+- **Random Playlist**: Picks a random episode and recommends similar ones using the same similarity approach
+- **Health Goals & Concerns**: Encodes your free-text input and finds episodes whose transcript embeddings are most similar to your query
 
 ## API Endpoints
 
@@ -94,10 +120,9 @@ The application expects podcast data in CSV format with the following columns:
 - `title`: Podcast title
 - `host`: Podcast host name
 - `transcript`: Full transcript text
-- `transcript_embedding_mean`: Pre-computed transcript embeddings
+- `transcript_embedding_mean`: Pre-computed transcript embeddings using mean pooling
 - `metadata_embedding`: Pre-computed metadata embeddings
 - `duration_min`: Duration in minutes
-- `tags`: Comma-separated tags
 
 The system automatically loads data from `../podcast_youtube_recommender/embedded_podcast_youtube_data.csv`.
 
