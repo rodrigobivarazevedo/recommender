@@ -12,7 +12,7 @@ def main():
     """Main function to start the FastAPI application"""
     
     # Check if we're in the right directory
-    if not os.path.exists('main.py'):
+    if not os.path.exists('app/main.py'):
         print("Error: main.py not found. Please run this script from the app directory.")
         sys.exit(1)
     
@@ -30,7 +30,7 @@ def main():
     try:
         # Start the server
         uvicorn.run(
-            "main:app",
+            "app.main:app",
             host=host,
             port=port,
             reload=reload,
