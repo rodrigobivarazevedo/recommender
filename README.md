@@ -24,16 +24,12 @@ A modern FastAPI web application that provides content-based recommendations for
 
 ## Installation
 
-1. **Create a virtual environment**:
+1. **Run with Docker Compose**:
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   docker compose up
    ```
 
-2. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+This will build and start the application using the provided `Dockerfile` and `docker-compose.yml` files. Make sure you have Docker and Docker Compose installed on your system.
 
 ## Usage
 
