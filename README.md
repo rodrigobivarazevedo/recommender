@@ -33,26 +33,13 @@ This will build and start the application using the provided `Dockerfile` and `d
 
 ## Usage
 
-1. **Navigate to the app directory**:
-   ```bash
-   cd app
-   ```
 
-2. **Start the application**:
-   ```bash
-   python run.py
-   ```
-   Or using uvicorn directly:
-   ```bash
-   uvicorn main:app --reload --host 0.0.0.0 --port 8000
-   ```
-
-3. **Open your browser** and navigate to:
+1. **Open your browser** and navigate to:
    ```
    http://localhost:8000
    ```
 
-4. **Get recommendations**:
+2. **Get recommendations**:
    - Go to the "Get Recommendations" page
    - Choose one of the three recommendation modes:
      
