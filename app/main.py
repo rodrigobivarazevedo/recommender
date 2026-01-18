@@ -7,9 +7,16 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import os
 import pickle
-from sentence_transformers import SentenceTransformer
 from sklearn.preprocessing import normalize
 import ast
+
+# Optional: sentence-transformers (not available in production)
+try:
+    from sentence_transformers import SentenceTransformer
+    EMBEDDING_MODEL_AVAILABLE = True
+except ImportError:
+    EMBEDDING_MODEL_AVAILABLE = False
+    print("sentence-transformers not available - embedding-based search disabled")
 
 app = FastAPI(
     title="Health Podcast Recommendation System",
@@ -49,14 +56,17 @@ class PodcastRecommendationSystem:
             
             print(f"Loaded {len(self.podcast_data)} podcasts")
             
-            # Load embedding model if available
-            model_path = "podcast_youtube_recommender/models/embedding_model"
-            if os.path.exists(model_path):
-                try:
-                    self.embedding_model = SentenceTransformer(model_path)
-                    print("Embedding model loaded successfully")
-                except Exception as e:
-                    print(f"Warning: Could not load embedding model: {e}")
+            # Load embedding model if available (not available in production)
+            if EMBEDDING_MODEL_AVAILABLE:
+                model_path = "podcast_youtube_recommender/models/embedding_model"
+                if os.path.exists(model_path):
+                    try:
+                        self.embedding_model = SentenceTransformer(model_path)
+                        print("Embedding model loaded successfully")
+                    except Exception as e:
+                        print(f"Warning: Could not load embedding model: {e}")
+            else:
+                print("Embedding model not available (sentence-transformers not installed)")
             
             return True
         except Exception as e:
@@ -192,6 +202,10 @@ class PodcastRecommendationSystem:
         """Get recommendations based on podcast title"""
         if self.podcast_data is None or self.cosine_sim is None:
             return []
+        
+        # Check if embedding model is available
+        if self.embedding_model is None:
+            raise ValueError("Embedding model not available. This feature requires sentence-transformers.")
             
         # Encode user input
         user_emb = self.embedding_model.encode(podcast_title)
@@ -238,6 +252,10 @@ class PodcastRecommendationSystem:
         """
         Filter DataFrame based on user input about health goal or concern using transcripts.
         """
+        # Check if embedding model is available
+        if self.embedding_model is None:
+            raise ValueError("Embedding model not available. This feature requires sentence-transformers.")
+        
         df = self.podcast_data.copy()
         
         if max_min is not None:
@@ -377,7 +395,11 @@ async def get_content_recommendations(user_input: str = Form(...), num_recommend
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
-    return {"status": "healthy", "recommendation_system_loaded": recommendation_system.podcast_data is not None}
+    return {
+        "status": "healthy", 
+        "recommendation_system_loaded": recommendation_system.podcast_data is not None,
+        "embedding_model_available": recommendation_system.embedding_model is not None
+    }
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=5050, reload=True) 

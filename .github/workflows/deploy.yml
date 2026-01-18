@@ -80,19 +80,26 @@ jobs:
         run: |
           gcloud compute ssh ${{ env.GCE_INSTANCE }} \
             --zone=${{ env.GCE_INSTANCE_ZONE }} \
+            --quiet \
             --command="
+              set -e
+
               gcloud auth configure-docker ${{ env.ARTIFACT_REGISTRY }} --quiet
+
               docker pull ${{ env.ARTIFACT_REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:latest
-              docker stop healthcast || true
-              docker rm healthcast || true
+
+              docker rm -f healthcast || true
+
               docker run -d \
                 --name healthcast \
                 --restart unless-stopped \
                 -p 80:5050 \
                 -e APP_ENV=production \
                 ${{ env.ARTIFACT_REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:latest
+
               docker image prune -af
             "
+
 
       - name: Verify deployment
         run: |
