@@ -58,6 +58,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 # Copy application code
 COPY --chown=appuser:appgroup app/ ./app/
 COPY --chown=appuser:appgroup podcast_youtube_recommender/ ./podcast_youtube_recommender/
+COPY --chown=appuser:appgroup tests/ ./tests/
+COPY --chown=appuser:appgroup pytest.ini ./pytest.ini
 
 # Switch to non-root user
 USER appuser
