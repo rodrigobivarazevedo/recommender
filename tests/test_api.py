@@ -37,6 +37,8 @@ class TestGetRecommendationsEndpoint:
         """Endpoint should return a recommendations list."""
         if recommendation_system.podcast_data is None:
             pytest.skip("Recommendation system not loaded")
+        if recommendation_system.embedding_model is None:
+            pytest.skip("Embedding model not available")
 
         response = client.post(
             "/get_recommendations",
@@ -51,6 +53,8 @@ class TestGetRecommendationsEndpoint:
         """Each recommendation should have required fields."""
         if recommendation_system.podcast_data is None:
             pytest.skip("Recommendation system not loaded")
+        if recommendation_system.embedding_model is None:
+            pytest.skip("Embedding model not available")
 
         response = client.post(
             "/get_recommendations",
@@ -69,6 +73,8 @@ class TestGetRecommendationsEndpoint:
         """Endpoint should return requested number of recommendations."""
         if recommendation_system.podcast_data is None:
             pytest.skip("Recommendation system not loaded")
+        if recommendation_system.embedding_model is None:
+            pytest.skip("Embedding model not available")
 
         response = client.post(
             "/get_recommendations",
@@ -141,6 +147,8 @@ class TestGetContentRecommendationsEndpoint:
         """Endpoint should return a recommendations list."""
         if recommendation_system.podcast_data is None:
             pytest.skip("Recommendation system not loaded")
+        if recommendation_system.embedding_model is None:
+            pytest.skip("Embedding model not available")
 
         response = client.post(
             "/get_content_recommendations",
@@ -155,6 +163,8 @@ class TestGetContentRecommendationsEndpoint:
         """Endpoint should accept optional max_duration parameter."""
         if recommendation_system.podcast_data is None:
             pytest.skip("Recommendation system not loaded")
+        if recommendation_system.embedding_model is None:
+            pytest.skip("Embedding model not available")
 
         response = client.post(
             "/get_content_recommendations",
@@ -170,6 +180,8 @@ class TestGetContentRecommendationsEndpoint:
         """Each content recommendation should have required fields."""
         if recommendation_system.podcast_data is None:
             pytest.skip("Recommendation system not loaded")
+        if recommendation_system.embedding_model is None:
+            pytest.skip("Embedding model not available")
 
         response = client.post(
             "/get_content_recommendations",

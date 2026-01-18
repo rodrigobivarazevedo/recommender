@@ -100,7 +100,6 @@ jobs:
               docker image prune -af
             "
 
-
       - name: Verify deployment
         run: |
           echo "Waiting for service to start..."
