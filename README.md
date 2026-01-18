@@ -137,21 +137,6 @@ app/
 - **Cosine Similarity**: Industry-standard similarity metric
 - **Real-time Processing**: Fast similarity calculations
 
-### Modern User Interface
-- Clean, health-themed design with green color scheme
-- Responsive layout that works on all screen sizes
-- Smooth animations and transitions
-- Interactive elements with hover effects
-- Loading states and error handling
-
-### Enhanced User Experience
-- Intuitive navigation between pages
-- Form validation and user feedback
-- Example podcast suggestions for easy testing
-- Similarity scores to show recommendation confidence
-- Host information and duration display
-- Transcript previews for better context
-
 ## Customization
 
 ### Embedding Weights
