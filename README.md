@@ -195,22 +195,5 @@ uvicorn main:app --reload --log-level debug
 - **Memory Usage**: Embeddings are loaded into memory for fast similarity calculations
 - **Scalability**: Consider using approximate nearest neighbor search for very large datasets
 
-## Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- FastAPI for the excellent web framework
-- Bootstrap for the responsive UI components
-- Font Awesome for the beautiful icons
-- scikit-learn for the machine learning capabilities
-- The embedding model creators for the semantic understanding capabilities 
