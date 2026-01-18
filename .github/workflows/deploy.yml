@@ -84,7 +84,7 @@ jobs:
             --command="
               set -e
 
-              gcloud auth configure-docker ${{ env.ARTIFACT_REGISTRY }} --quiet
+              gcloud auth configure-docker ${{ env.ARTIFACT_REGISTRY }}
 
               docker pull ${{ env.ARTIFACT_REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:latest
 
