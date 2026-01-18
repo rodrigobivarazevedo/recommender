@@ -57,7 +57,7 @@ jobs:
           docker push ${{ env.ARTIFACT_REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           docker push ${{ env.ARTIFACT_REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:latest
 
-          
+
   deploy:
     name: Deploy to GCE
     needs: build-test-push
@@ -85,11 +85,11 @@ jobs:
             --command="
               set -e
 
-              gcloud auth configure-docker ${{ env.ARTIFACT_REGISTRY }}
+              gcloud auth configure-docker ${{ env.ARTIFACT_REGISTRY }} --quiet
 
               docker pull ${{ env.ARTIFACT_REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:latest
 
-              docker rm -f healthcast || true
+              docker rm -f healthcast 2>/dev/null || true
 
               docker run -d \
                 --name healthcast \
