@@ -1,0 +1,17 @@
+services:
+  healthcast:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    container_name: healthcast
+    restart: unless-stopped
+    ports:
+      - "80:5050"
+    environment:
+      - APP_ENV=production
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5050/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s

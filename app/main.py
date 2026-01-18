@@ -380,4 +380,4 @@ async def health_check():
     return {"status": "healthy", "recommendation_system_loaded": recommendation_system.podcast_data is not None}
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True) 
+    uvicorn.run("main:app", host="0.0.0.0", port=5050, reload=True) 

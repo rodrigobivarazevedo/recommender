@@ -1,17 +1,52 @@
 transcripts/
-
 transcripts
 
-venv
+# Virtual environments
 venv/
+.venv/
+env/
 
-# all pycaches
+# Python
 __pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
 
+# Data files
 all_combined_final.csv
-
-
-
 embedded_podcast_data.pkl
-
 TfidfVectorizer_embedded_podcast_data.pkl
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# GCP credentials - NEVER COMMIT THESE
+*-key.json
+*-credentials.json
+service-account*.json
+healthcast-deploy-key.json
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/

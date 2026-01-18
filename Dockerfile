@@ -23,8 +23,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Expose the port FastAPI will run on
-EXPOSE 8080
+EXPOSE 5050
 
 # Command to run the FastAPI application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--lifespan=on"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5050", "--lifespan=on"]
 

@@ -1,0 +1,133 @@
+name: Build and Deploy to GCP
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GCE_INSTANCE: ${{ secrets.GCE_INSTANCE }}
+  GCE_INSTANCE_ZONE: ${{ secrets.GCE_INSTANCE_ZONE }}
+  ARTIFACT_REGISTRY: ${{ secrets.GCP_REGION }}-docker.pkg.dev
+  REPOSITORY: ${{ secrets.GCP_ARTIFACT_REPO }}
+  IMAGE_NAME: healthcast
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Build test image
+        run: docker build -t healthcast-test .
+
+      - name: Run tests
+        run: |
+          docker run --rm healthcast-test sh -c "pip install -q pytest pytest-asyncio httpx && pytest tests/ -v --tb=short"
+
+  build-and-push:
+    name: Build and Push Docker Image
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: Configure Docker for Artifact Registry
+        run: |
+          gcloud auth configure-docker ${{ env.ARTIFACT_REGISTRY }} --quiet
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -f Dockerfile.prod \
+            -t ${{ env.ARTIFACT_REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
+            -t ${{ env.ARTIFACT_REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:latest \
+            .
+
+      - name: Push Docker image
+        run: |
+          docker push ${{ env.ARTIFACT_REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          docker push ${{ env.ARTIFACT_REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:latest
+
+  deploy:
+    name: Deploy to GCE
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: Deploy to Compute Engine
+        run: |
+          gcloud compute ssh ${{ env.GCE_INSTANCE }} \
+            --zone=${{ env.GCE_INSTANCE_ZONE }} \
+            --command="
+              # Configure Docker for Artifact Registry
+              gcloud auth configure-docker ${{ env.ARTIFACT_REGISTRY }} --quiet
+
+              # Pull the latest image
+              docker pull ${{ env.ARTIFACT_REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:latest
+
+              # Stop and remove existing container
+              docker stop healthcast || true
+              docker rm healthcast || true
+
+              # Run the new container
+              docker run -d \
+                --name healthcast \
+                --restart unless-stopped \
+                -p 80:5050 \
+                -e APP_ENV=production \
+                ${{ env.ARTIFACT_REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_NAME }}:latest
+
+              # Clean up old images
+              docker image prune -af
+            "
+
+      - name: Verify deployment
+        run: |
+          echo "Waiting for service to start..."
+          sleep 30
+
+          INSTANCE_IP=$(gcloud compute instances describe ${{ env.GCE_INSTANCE }} \
+            --zone=${{ env.GCE_INSTANCE_ZONE }} \
+            --format='get(networkInterfaces[0].accessConfigs[0].natIP)')
+
+          echo "Testing health endpoint at http://$INSTANCE_IP/health"
+          curl -f http://$INSTANCE_IP/health || echo "Health check failed - please verify manually"
